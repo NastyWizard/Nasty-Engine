@@ -180,7 +180,7 @@ namespace NastyEngine
             // prepare render
             GraphicsDevice.SetRenderTarget(MainImage);
             GraphicsDevice.Viewport = Viewport;
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(SceneManager.GetCurrentScene().clearColor);
 
             // Main Render
 

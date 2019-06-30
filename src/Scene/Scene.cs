@@ -7,7 +7,7 @@ namespace NastyEngine
     {
 
         public Camera camera = new Camera();
-
+        public Color clearColor = Color.Black;
         //private RenderTarget2D outlineTarget;
 
         protected Texture2D backgroundTex;

@@ -1380,10 +1380,11 @@ namespace NastyEngine
         private static bool CanFocus(GUIWindow window)
         {
             int index = gContext.dwindows.IndexOf(window); // index to check from
-
-            if (guiMenuBar.bounds.Contains(MouseInput.Position))
-                return false;
-
+            if (guiMenuBar != null)
+            {
+                if (guiMenuBar.bounds.Contains(MouseInput.Position))
+                    return false;
+            }
             if (index != gContext.dwindows.Count - 1)
             {
                 for (int i = index + 1; i < gContext.dwindows.Count; i++)
@@ -1393,12 +1394,15 @@ namespace NastyEngine
                 }
             }
 
-            foreach (var menu in guiMenuBar.menus)
+            if (guiMenuBar != null)
             {
-                if (menu.Value.active)
+                foreach (var menu in guiMenuBar.menus)
                 {
-                    if (menu.Value.itemBounds.Contains(MouseInput.Position))
-                        return false;
+                    if (menu.Value.active)
+                    {
+                        if (menu.Value.itemBounds.Contains(MouseInput.Position))
+                            return false;
+                    }
                 }
             }
 
