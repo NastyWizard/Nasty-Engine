@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define NASTY_ENGINE
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
