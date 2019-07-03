@@ -45,6 +45,9 @@
     <Compile Include="Engine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Collision\BoxCollider.cs" />
+    <Compile Include="src\Collision\Collider.cs" />
+    <Compile Include="src\Collision\CollisionManager.cs" />
     <Compile Include="src\Components\PhysBody.cs" />
     <Compile Include="src\Components\SpriteRenderer.cs" />
     <Compile Include="src\Graphics\Animation.cs" />
@@ -55,8 +58,6 @@
     <Compile Include="src\Graphics\Shader.cs" />
     <Compile Include="src\Input\InputManager.cs" />
     <Compile Include="src\Input\InputMapping.cs" />
-    <Compile Include="src\Level\Tile.cs" />
-    <Compile Include="src\Level\TileMap.cs" />
     <Compile Include="src\Misc\GTime.cs" />
     <Compile Include="src\Misc\PythonLoader.cs" />
     <Compile Include="src\Object\Component.cs" />
@@ -153,9 +154,7 @@
     <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Collision\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\Shaders\CircleOutlineRender.fx" />
     <Content Include="Content\Shaders\CircleRender.fx" />
