@@ -22,7 +22,7 @@ namespace NastyEngine
                 m_parent = null;
                 m_children = null;
                 m_bounds = bounds;
-                m_col = Color.LawnGreen;
+                m_col = Color.MonoGameOrange;
             }
 
             public void Clear()
@@ -126,10 +126,16 @@ namespace NastyEngine
                         if (colliders[i].CheckOverlap(colliders[k]))
                         {
                             //pairedColliders.Add(forwardPair);
-                            if(!colliders[i].m_others.Contains(colliders[k]))
+                            if (!colliders[i].m_others.Contains(colliders[k]))
+                            {
                                 colliders[i].OnOverlapEnter(colliders[k]);
+                                colliders[i].OnOverlapStay(colliders[k]);
+                            }
                             if (colliders[k].IsStatic())
-                                colliders[k].OnOverlapEnter(colliders[i]);
+                            {
+                                if (!colliders[k].m_others.Contains(colliders[i]))
+                                    colliders[k].OnOverlapEnter(colliders[i]);
+                            }
                             //colliders[k].OnOverlapEnter(colliders[i]);
                         } else if(colliders[i].m_others.Contains(colliders[k]))
                         { 
@@ -185,9 +191,10 @@ namespace NastyEngine
             Instance_.m_colliders.Add(collider);
         }
 
-        public static void DrawQuadTree()
+        public static void Render()
         {
-            Instance_.m_quadTree.Render();
+            if(DebugRender)
+                Instance_.m_quadTree.Render();
         }
 
         public static void SetMinQuadSize(int minSize)

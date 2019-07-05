@@ -64,7 +64,16 @@ namespace NastyEngine
             base.OnUpdate();
         }
 
+        public void ForcePositionUpdate()
+        {
+            if (m_spriteRenderer != null)
+                m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
+            else
+                m_bounds.Location = Parent.transform.Position.ToPoint();
+        }
+
         public abstract bool CheckOverlap(Collider other);
+        public abstract bool CheckOverlap(Vector2 offset, Collider other);
 
         public delegate void OverlapDelegate(Collider c);
 

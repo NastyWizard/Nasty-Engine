@@ -23,7 +23,7 @@ namespace NastyEngine
         public Rectangle BoundingBox = new Rectangle(0, 0, 32, 32);
         public Vector2 BoundingBoxOffset = Vector2.Zero;
 
-        public Dictionary<SceneNode.TagTypes, PhysBody> Overlaps = new Dictionary<SceneNode.TagTypes, PhysBody>(); // <Name, Body> TODO: maybe change this to Type of gameobject instead of physbody
+        //public Dictionary<SceneNode.TagTypes, PhysBody> Overlaps = new Dictionary<SceneNode.TagTypes, PhysBody>(); // <Name, Body> TODO: maybe change this to Type of gameobject instead of physbody
 
         private List<PhysBody> collisions = new List<PhysBody>();
 
@@ -42,8 +42,8 @@ namespace NastyEngine
 
             if (!IsSleeping)
             {
-                if (!Overlaps.ContainsKey(SceneNode.TagTypes.FLOOR))
-                    vspeed += gravity;
+                //if (!Overlaps.ContainsKey(SceneNode.TagTypes.FLOOR))
+                //    vspeed += gravity;
 
                 deltaSpeedH = hspeed * GTime.Delta;
                 deltaSpeedV = vspeed * GTime.Delta;
@@ -182,13 +182,13 @@ namespace NastyEngine
 
         public void AddOverlap(bool overlaps, PhysBody body)
         {
-            if (overlaps && !Overlaps.ContainsKey(body.Parent.Tags)) // TODO: maybe change this to ID, but gotta improve ID system
-                Overlaps.Add(body.Parent.Tags, body);
-            else if (Overlaps.ContainsKey(body.Parent.Tags))
-            {
-                if (Overlaps[body.Parent.Tags] == body && !overlaps)
-                    Overlaps.Remove(body.Parent.Tags);
-            }
+            //if (overlaps && !Overlaps.ContainsKey(body.Parent.Tags)) // TODO: maybe change this to ID, but gotta improve ID system
+            //    Overlaps.Add(body.Parent.Tags, body);
+            //else if (Overlaps.ContainsKey(body.Parent.Tags))
+            //{
+            //    if (Overlaps[body.Parent.Tags] == body && !overlaps)
+            //        Overlaps.Remove(body.Parent.Tags);
+            //}
         }
 
     }

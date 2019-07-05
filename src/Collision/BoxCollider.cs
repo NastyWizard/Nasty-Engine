@@ -22,6 +22,14 @@ namespace NastyEngine
             return m_bounds.Intersects(other.m_bounds);
         }
 
+        public override bool CheckOverlap(Vector2 offset, Collider other)
+        {
+            Rectangle tempBounds = m_bounds;
+            tempBounds.Location += offset.ToPoint();
+
+            return tempBounds.Intersects(other.m_bounds);
+        }
+
         public override void DebugDraw()
         {
             base.DebugDraw();

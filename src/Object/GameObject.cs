@@ -19,6 +19,8 @@ namespace NastyEngine
 
         public int tileHeight; // current tile level for this object
 
+        public Vector2 m_PreviousPos { get; private set; }
+
         public GameObject()
         {
             tileHeight = 0;
@@ -64,6 +66,20 @@ namespace NastyEngine
             StartPos = transform.LocalPosition;
         }
 
+        public override void PreUpdate()
+        {
+            m_PreviousPos = transform.Position;
+            if (NumComponents > 0)
+            {
+                for (int i = 0; i < NumComponents; i++)
+                {
+                    if (components[i].Enabled)
+                        components[i].OnPreUpdate();
+                }
+            }
+            base.PreUpdate();
+        }
+
         public override void Update()
         {
             if (NumComponents > 0)
@@ -78,6 +94,19 @@ namespace NastyEngine
             base.Update();
         }
 
+        public override void PostUpdate()
+        {
+            if (NumComponents > 0)
+            {
+                for (int i = 0; i < NumComponents; i++)
+                {
+                    if (components[i].Enabled)
+                        components[i].OnPostUpdate();
+                }
+            }
+
+            base.PostUpdate();
+        }
         public override void Render()
         {
             if (NumComponents > 0)
