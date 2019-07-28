@@ -15,6 +15,7 @@ namespace NastyEngine
 
         // reference to parent transform
         private Transform pTransform;
+        private Vector2? overridePos = null;
         private Shader shader;
 
         public SpriteRenderer(Texture2D img, Shader shdr = null)
@@ -52,7 +53,9 @@ namespace NastyEngine
                 if (pTransform == null)
                     pTransform = Parent.GetComponent<Transform>();
                 // draw the sprite
-                Draw.SpriteBatch.Draw(Sprite, pTransform.Position, SourceRect, Color.White, MathHelper.ToRadians(pTransform.rotation), Offset, pTransform.scale, SpriteEffects.None, 1);
+                var tpos = VectorUtil.Floor(pTransform.Position);
+
+                Draw.SpriteBatch.Draw(Sprite, (overridePos.HasValue ? overridePos.Value : tpos), SourceRect, Color.White, MathHelper.ToRadians(pTransform.rotation), Offset, pTransform.scale, SpriteEffects.None, 1);
 
                 if (shader != null)
                 {
@@ -62,6 +65,8 @@ namespace NastyEngine
                 }
             }
         }
+
+        public void SetOverridePos(Vector2 pos) { overridePos = pos; }
 
     }
 }

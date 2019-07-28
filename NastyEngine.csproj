@@ -58,8 +58,10 @@
     <Compile Include="src\Graphics\Shader.cs" />
     <Compile Include="src\Input\InputManager.cs" />
     <Compile Include="src\Input\InputMapping.cs" />
+    <Compile Include="src\Misc\RectangleF.cs" />
     <Compile Include="src\Misc\GTime.cs" />
     <Compile Include="src\Misc\PythonLoader.cs" />
+    <Compile Include="src\Misc\VectorUtil.cs" />
     <Compile Include="src\Object\Component.cs" />
     <Compile Include="src\Object\GameObject.cs" />
     <Compile Include="src\Object\SceneNode.cs" />

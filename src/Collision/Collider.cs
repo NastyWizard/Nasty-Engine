@@ -13,22 +13,21 @@ namespace NastyEngine
         /// A collider that will never move
         /// </summary>
         protected bool m_isStatic;
-        private SpriteRenderer m_spriteRenderer;
+        protected SpriteRenderer m_spriteRenderer;
+
         public Rectangle m_bounds;
 
         internal List<Collider> m_others;
 
-        public Collider(Rectangle bounds)
+        public Collider()
         {
             m_others = new List<Collider>();
-            m_bounds = bounds;
             CollisionManager.Register(this);
             m_isStatic = false;
         }
-        public Collider(Rectangle bounds, bool isStatic)
+        public Collider(bool isStatic)
         {
             m_others = new List<Collider>();
-            m_bounds = bounds;
             CollisionManager.Register(this);
             m_isStatic = isStatic;
         }
@@ -37,10 +36,7 @@ namespace NastyEngine
         {
             m_spriteRenderer = Parent.GetComponent<SpriteRenderer>();
 
-            if (m_spriteRenderer != null)
-                m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
-            else
-                m_bounds.Location = Parent.transform.Position.ToPoint();
+            ForcePositionUpdate();
             base.OnInit();
         }
 
@@ -56,21 +52,12 @@ namespace NastyEngine
             }
 
 
-            if (m_spriteRenderer != null)
-                m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
-            else
-                m_bounds.Location = Parent.transform.Position.ToPoint();
+            ForcePositionUpdate();
 
             base.OnUpdate();
         }
 
-        public void ForcePositionUpdate()
-        {
-            if (m_spriteRenderer != null)
-                m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
-            else
-                m_bounds.Location = Parent.transform.Position.ToPoint();
-        }
+        public abstract void ForcePositionUpdate();
 
         public abstract bool CheckOverlap(Collider other);
         public abstract bool CheckOverlap(Vector2 offset, Collider other);
