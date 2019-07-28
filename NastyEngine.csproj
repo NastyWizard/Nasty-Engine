@@ -66,7 +66,7 @@
     <Compile Include="src\Object\GameObject.cs" />
     <Compile Include="src\Object\SceneNode.cs" />
     <Compile Include="src\Object\Transform.cs" />
-    <Compile Include="src\Scene\DemoScene.cs" />
+    <Compile Include="src\Scene\Demo\DemoMainScene.cs" />
     <Compile Include="src\Scene\Scene.cs" />
     <Compile Include="src\Scene\SceneManager.cs" />
     <Compile Include="src\UI\Button.cs" />

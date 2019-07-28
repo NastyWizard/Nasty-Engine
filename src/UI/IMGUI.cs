@@ -330,10 +330,11 @@ namespace NastyEngine
             {
                 // draw menu title bar
                 Vector2 titleMeasure = font.MeasureString(title);
-                Rectangle titleBounds = new Rectangle(bounds.X, bounds.Y - (int)titleMeasure.Y, Math.Max((int)titleMeasure.X, bounds.Width), (int)titleMeasure.Y);
+                Rectangle titleBounds = new Rectangle(bounds.X, bounds.Y - (int)titleMeasure.Y, bounds.Width, (int)titleMeasure.Y);
+
                 Draw.Rect(titleBounds, BGColor);
                 Draw.RectOutline(titleBounds, outlineColor);
-                Draw.SpriteBatch.DrawString(font, title, new Vector2(titleBounds.X + ((titleBounds.Width - indent.X * 2) - titleMeasure.X) / 2, titleBounds.Y + 1), textColor);
+                Draw.SpriteBatch.DrawString(font, title, new Vector2(titleBounds.X + (titleBounds.Width - (int)titleMeasure.X)/2, titleBounds.Y + 1), textColor);
                 // draw menu
                 Draw.Rect(bounds, clearColor);
                 Draw.RectOutline(bounds, outlineColor);
@@ -1255,7 +1256,7 @@ namespace NastyEngine
 
             if (width == -1)
             {
-                bounds.Width = (int)textSize.X + 4;
+                bounds.Width = window.bounds.Width - (int)gContext.style.indent.X*2;
             }
 
             drawableTextField.bounds = bounds;
