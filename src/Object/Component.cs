@@ -24,6 +24,8 @@ namespace NastyEngine
 
         public virtual void OnInit() { hasInit = true; }
         public virtual void OnUpdate() { }
+        public virtual void OnPreUpdate() { }
+        public virtual void OnPostUpdate() { }
         public virtual void OnRender() { }
     }
 }

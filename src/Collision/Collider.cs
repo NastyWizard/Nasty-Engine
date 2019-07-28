@@ -12,17 +12,25 @@ namespace NastyEngine
         /// <summary>
         /// A collider that will never move
         /// </summary>
-        private bool m_isStatic;
+        protected bool m_isStatic;
         private SpriteRenderer m_spriteRenderer;
         public Rectangle m_bounds;
 
-        internal Collider m_other = null;
+        internal List<Collider> m_others;
 
         public Collider(Rectangle bounds)
         {
+            m_others = new List<Collider>();
             m_bounds = bounds;
             CollisionManager.Register(this);
             m_isStatic = false;
+        }
+        public Collider(Rectangle bounds, bool isStatic)
+        {
+            m_others = new List<Collider>();
+            m_bounds = bounds;
+            CollisionManager.Register(this);
+            m_isStatic = isStatic;
         }
 
         public override void OnInit()
@@ -38,10 +46,15 @@ namespace NastyEngine
 
         public override void OnUpdate()
         {
-            if (m_other != null)
-                OnOverlapStay(m_other);
             if (m_isStatic)
                 return;
+
+            if (m_others.Count > 0)
+            {
+                for(int i = 0; i < m_others.Count; i++)
+                    OnOverlapStay(m_others[i]);
+            }
+
 
             if (m_spriteRenderer != null)
                 m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
@@ -51,27 +64,45 @@ namespace NastyEngine
             base.OnUpdate();
         }
 
-        public Collider(Rectangle bounds, bool isStatic)
+        public void ForcePositionUpdate()
         {
-            m_bounds = bounds;
-            CollisionManager.Register(this);
-            m_isStatic = isStatic;
+            if (m_spriteRenderer != null)
+                m_bounds.Location = (Parent.transform.Position - m_spriteRenderer.Offset).ToPoint();
+            else
+                m_bounds.Location = Parent.transform.Position.ToPoint();
         }
 
         public abstract bool CheckOverlap(Collider other);
+        public abstract bool CheckOverlap(Vector2 offset, Collider other);
 
-        public virtual void OnOverlapEnter(Collider other)
+        public delegate void OverlapDelegate(Collider c);
+
+        public OverlapDelegate OverlapEnter;
+        public OverlapDelegate OverlapExit;
+        public OverlapDelegate OverlapStay;
+
+        internal virtual void OnOverlapEnter(Collider other)
         {
-            m_other = other;
+            m_others.Add(other);
+            if(OverlapEnter != null)
+                OverlapEnter(other);
         }
 
-        public virtual void OnOverlapExit(Collider other)
+        internal virtual void OnOverlapExit(Collider other)
         {
-            if(m_other == other)
-                m_other = null;
+            m_others.Remove(other);
+            if (OverlapExit != null)
+                OverlapExit(other);
         }
 
-        public virtual void OnOverlapStay(Collider other) { }
+        internal virtual void OnOverlapStay(Collider other)
+        {
+            if (OverlapStay != null)
+                OverlapStay(other);
+        }
         public virtual void DebugDraw(){}
+
+        public bool IsStatic() { return m_isStatic; }
+        public void SetStatic(bool b) { m_isStatic = b; }
     }
 }

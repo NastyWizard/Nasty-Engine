@@ -17,16 +17,31 @@ namespace NastyEngine
         {
 
         }
-
         public override bool CheckOverlap(Collider other)
         {
             return m_bounds.Intersects(other.m_bounds);
         }
 
+        public override bool CheckOverlap(Vector2 offset, Collider other)
+        {
+            Rectangle tempBounds = m_bounds;
+            tempBounds.Location += offset.ToPoint();
+
+            return tempBounds.Intersects(other.m_bounds);
+        }
+
         public override void DebugDraw()
         {
             base.DebugDraw();
-            Draw.RectOutline(m_bounds, Color.LawnGreen);
+            Draw.RectOutline(m_bounds, (m_others.Count == 0) ? Color.MonoGameOrange : Color.LimeGreen);
         }
+
+        public override void OnRender()
+        {
+            if (CollisionManager.DebugRender)
+                DebugDraw();
+            base.OnRender();
+        }
+
     }
 }

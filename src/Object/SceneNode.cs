@@ -10,11 +10,8 @@ namespace NastyEngine
 {
     public class SceneNode
     {
-
-        public enum TagTypes { NONE = 0, PLAYER = 1, FLOOR = 2 }
-
         public string Name = "";
-        public TagTypes Tags = TagTypes.NONE;
+        public int m_Tags = 0;
         public Guid ID = Guid.NewGuid();
         private bool isEnabled = true;
         public bool Enabled
@@ -62,6 +59,37 @@ namespace NastyEngine
                 {
                     if (children[k].Enabled)
                         children[k].Init();
+                }
+            }
+        }
+
+        public virtual void PreUpdate()
+        {
+            if (numChildren != 0)
+            {
+
+                var childList = children.ToList();
+
+                childList = childList.OrderBy(pair => pair.Value.depth).ToList();
+                for (int i = 0; i < childList.Count; i++)
+                {
+                    if (childList[i].Value.Enabled)
+                        childList[i].Value.PreUpdate();
+                }
+            }
+        }
+        public virtual void PostUpdate()
+        {
+            if (numChildren != 0)
+            {
+
+                var childList = children.ToList();
+
+                childList = childList.OrderBy(pair => pair.Value.depth).ToList();
+                for (int i = 0; i < childList.Count; i++)
+                {
+                    if (childList[i].Value.Enabled)
+                        childList[i].Value.PostUpdate();
                 }
             }
         }

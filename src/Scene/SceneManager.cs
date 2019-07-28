@@ -30,7 +30,11 @@ namespace NastyEngine
         public static void UpdateCurrentScene()
         {
             if (GetCurrentScene().Enabled)
+            {
+                GetCurrentScene().PreUpdate();
                 GetCurrentScene().Update();
+                GetCurrentScene().PostUpdate();
+            }
         }
 
         public static Scene GetCurrentScene()

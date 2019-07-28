@@ -58,6 +58,7 @@ namespace NastyEngine
         {
             this.title = title;
             // Initialize Scenes
+
             sceneManager = new SceneManager(startScene);
             GameWidth = gameWidth;
             GameHeight = gameHeight;
@@ -129,6 +130,8 @@ namespace NastyEngine
             Window.Title = title;
             Window.TextInput += TextInputHandler;
 
+            var collisionManager = new CollisionManager(GameWidth, GameHeight);
+
             var resourceManager = new ResourceManager(Content);
 
             inputManager = new InputManager();
@@ -171,6 +174,8 @@ namespace NastyEngine
             SceneManager.InitCurrentScene();
             SceneManager.UpdateCurrentScene();
 
+            CollisionManager.Update();
+
             base.Update(gameTime);
         }
 
@@ -187,6 +192,7 @@ namespace NastyEngine
 
             sceneManager.CurrentScene.RenderBegin();
             sceneManager.CurrentScene.Render();
+            CollisionManager.Render();
             sceneManager.CurrentScene.RenderEnd();
             //
             base.Draw(gameTime);

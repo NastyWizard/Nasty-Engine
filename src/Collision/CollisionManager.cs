@@ -22,7 +22,7 @@ namespace NastyEngine
                 m_parent = null;
                 m_children = null;
                 m_bounds = bounds;
-                m_col = Color.LawnGreen;
+                m_col = Color.MonoGameOrange;
             }
 
             public void Clear()
@@ -66,15 +66,21 @@ namespace NastyEngine
                         // BR
                         m_children[3] = new QuadTree(new Rectangle(m_bounds.X + halfWidth, m_bounds.Y + halfHeight, halfWidth, halfHeight));
 
+                        int numStatic = 0;
+                        int numDynamic = 0;
 
                         for (int k = 0; k < colliders.Count; k++)
                         {
                             if (m_bounds.Intersects(colliders[k].m_bounds))
                             {
                                 containedColliders.Add(colliders[k]);
+                                if (colliders[k].IsStatic())
+                                    numStatic++;
+                                else
+                                    numDynamic++;
                             }
                         }
-                        if (containedColliders.Count < 2)
+                        if (numDynamic == 0 || (numDynamic == 1 && numStatic == 0))
                         {
                             m_children = null;
                         }
@@ -105,26 +111,39 @@ namespace NastyEngine
 
             private void HandleOverlap(List<Collider> colliders)
             {
-                HashSet<Tuple<Collider, Collider>> pairedColliders = new HashSet<Tuple<Collider, Collider>>();
+                HashSet<Tuple<Guid, Guid>> pairedColliders = new HashSet<Tuple<Guid, Guid>>();
                 for (int i = 0; i < colliders.Count; i++)
                 {
                     for (int k = colliders.Count - 1; k >= 0; k--)
                     {
                         if (k == i) continue;
-                        var forwardPair = new Tuple<Collider, Collider>(colliders[i], colliders[k]);
-                        var reversePair = new Tuple<Collider, Collider>(colliders[k], colliders[i]);
-                        if (pairedColliders.Contains(forwardPair) || pairedColliders.Contains(reversePair))
-                            continue;
+                        if (colliders[i].IsStatic()) continue;
+                        //var forwardPair = new Tuple<Guid, Guid>(colliders[i].Parent.ID, colliders[k].Parent.ID);
+                        //var reversePair = new Tuple<Guid, Guid>(colliders[k].Parent.ID, colliders[i].Parent.ID);
+                        //if (pairedColliders.Contains(reversePair))
+                        //    continue;
+
                         if (colliders[i].CheckOverlap(colliders[k]))
                         {
-                            pairedColliders.Add(forwardPair);
-                            colliders[i].OnOverlapEnter(colliders[k]);
-                            colliders[k].OnOverlapEnter(colliders[i]);
-                        } else if (colliders[k].m_other != null)
-                        {
-                            pairedColliders.Add(forwardPair);
+                            //pairedColliders.Add(forwardPair);
+                            if (!colliders[i].m_others.Contains(colliders[k]))
+                            {
+                                colliders[i].OnOverlapEnter(colliders[k]);
+                                colliders[i].OnOverlapStay(colliders[k]);
+                            }
+                            if (colliders[k].IsStatic())
+                            {
+                                if (!colliders[k].m_others.Contains(colliders[i]))
+                                    colliders[k].OnOverlapEnter(colliders[i]);
+                            }
+                            //colliders[k].OnOverlapEnter(colliders[i]);
+                        } else if(colliders[i].m_others.Contains(colliders[k]))
+                        { 
+                            //pairedColliders.Add(forwardPair);
                             colliders[i].OnOverlapExit(colliders[k]);
-                            colliders[k].OnOverlapExit(colliders[i]);
+                            if (colliders[k].IsStatic())
+                                colliders[k].OnOverlapExit(colliders[i]);
+                            //colliders[k].OnOverlapExit(colliders[i]);
                         }
                     }
                 }
@@ -134,6 +153,8 @@ namespace NastyEngine
         } // QuadTree end
 
         public static CollisionManager Instance_;
+
+        public static bool DebugRender = false;
 
         private QuadTree m_quadTree;
         private int m_minQuadSize = 16;
@@ -170,9 +191,10 @@ namespace NastyEngine
             Instance_.m_colliders.Add(collider);
         }
 
-        public static void DrawQuadTree()
+        public static void Render()
         {
-            Instance_.m_quadTree.Render();
+            if(DebugRender)
+                Instance_.m_quadTree.Render();
         }
 
         public static void SetMinQuadSize(int minSize)
